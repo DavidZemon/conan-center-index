@@ -7,7 +7,7 @@ from conans.errors import ConanInvalidConfiguration
 class GTestConan(ConanFile):
     name = "gtest"
     description = "Google's C++ test framework"
-    url = "https://github.com/conan-io/conan-center-index"
+    url = "https://github.com/DavidZemon/conan-center-index"
     homepage = "https://github.com/google/googletest"
     license = "BSD-3-Clause"
     topics = ("conan", "gtest", "testing", "google-testing", "unit-test")
@@ -45,7 +45,7 @@ class GTestConan(ConanFile):
                 "clang": "5",
                 "apple-clang": "9.1"
             }
-        
+
     @property
     def _postfix(self):
         return self.options.debug_postfix if self.settings.build_type == "Debug" else ""
@@ -105,8 +105,6 @@ class GTestConan(ConanFile):
         self.copy("LICENSE", dst="licenses", src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
-        tools.rmdir(os.path.join(self.package_folder, "lib", "pkgconfig"))
-        tools.rmdir(os.path.join(self.package_folder, "lib", "cmake"))
         for pdb_file in glob.glob(os.path.join(self.package_folder, "lib", "*.pdb")):
             os.unlink(pdb_file)
 
@@ -121,7 +119,7 @@ class GTestConan(ConanFile):
         self.cpp_info.components["libgtest"].libs = ["gtest{}".format(self._postfix)]
         if self.settings.os == "Linux":
             self.cpp_info.components["libgtest"].system_libs.append("pthread")
-        
+
         if self.settings.os == "Neutrino" and self.settings.os.version == "7.1":
             self.cpp_info.components["libgtest"].system_libs.append("regex")
 
